@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <style>
+        .header-image {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            background-color: #00bcd4;
+            font-family: "Gill Sans", Helvetica, Arial, sans-serif;
+            font-size: 1em;
+            line-height: 1.2;
+        }
+
+        h1, h2 {
+            color: #00bcd4;
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 60em;
+            background: #212529;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .footer-primary {
+            background-color: #333;
+            color: #00bcd4;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #00bcd4;
+        }
+
+        .btn-info {
+            background-color: #00bcd4;
+            border-color: #00bcd4;
+        }
+
+        .btn-info:hover {
+            background-color: #0097a7;
+            border-color: #0097a7;
+        }
+
+        .btn-primary {
+            background-color: #00bcd4;
+            border-color: #00bcd4;
+        }
+
+        .btn-primary:hover {
+            background-color: #0097a7;
+            border-color: #0097a7;
+        }
+    </style>
+
+    <title>Techie's Treasures</title>
+
+</head>
+<body>
+
+<div class="container">
+    <img src="/images/header_img.jpg" alt="Tech Gadgets Header Image" class="header-image">
+    <h1 class="mt-4">Techie's Treasures</h1>
+    <hr>
+    <div class="  mb-3">
+        <a href="/about" class="btn btn-info">About Techie's Treasures</a>
+    </div>
+
+    <h2 class="mt-4">Individual Gadgets</h2>
+    <form th:action="@{/mainscreen}" class="d-flex justify-content-center mb-3">
+        <input type="text" name="partkeyword" id="partkeyword" class="form-control me-2" size="50" th:value="${partkeyword}" placeholder="Filter" required />
+        <input type="submit" value="Search" class="btn btn-outline-light me-2" />
+        <input type="button" value="Clear" id="btnClearPart" class="btn btn-outline-light" onclick="clearSearch()" />
+    </form>
+    <div class="  mb-3">
+        <a th:href="@{/showFormAddInPart}" class="btn btn-primary btn-sm mb-3">Add Inhouse Part</a>
+        <a th:href="@{/showFormAddOutPart}" class="btn btn-primary btn-sm mb-3">Add Outsourced Part</a>
+    </div>
+    <table class="table table-dark table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Inventory</th>
+            <th>Min Inv</th>
+            <th>Max Inv</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tempPart : ${parts}">
+            <td th:text="${tempPart.name}">1</td>
+            <td th:text="${tempPart.price}">1</td>
+            <td th:text="${tempPart.inv}">1</td>
+            <td th:text="${tempPart.minInv}">1</td>
+            <td th:text="${tempPart.maxInv}">1</td>
+            <td>
+                <a th:href="@{/showPartFormForUpdate(partID=${tempPart.id})}" class="btn btn-primary btn-sm mb-3">Update</a>
+                <a th:href="@{/deletepart(partID=${tempPart.id})}" class="btn btn-danger btn-sm mb-3"
+                   onclick="if(!(confirm('Are you sure you want to delete this part?')))return false">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <h2 class="mt-4">Gadget Bundles</h2>
+    <form th:action="@{/mainscreen}" class="d-flex justify-content-center mb-3">
+        <input type="text" name="productkeyword" id="productkeyword" class="form-control me-2" size="50" th:value="${productkeyword}" placeholder="Filter" required />
+        <input type="submit" value="Search" class="btn btn-outline-light me-2" />
+        <input type="button" value="Clear" id="btnClearProduct" class="btn btn-outline-light" onclick="clearSearch()" />
+    </form>
+    <script type="text/javascript">
+        function clearSearch() {
+            window.location = "[[@{/}]]";
+        }
+    </script>
+    <div class="  mb-3">
+        <a th:href="@{/showFormAddProduct}" class="btn btn-primary btn-sm mb-3">Add Product</a>
+    </div>
+    <table class="table table-dark table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Inventory</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tempProduct : ${products}">
+            <td th:text="${tempProduct.name}">1</td>
+            <td th:text="${tempProduct.price}">1</td>
+            <td th:text="${tempProduct.inv}">1</td>
+            <td>
+                <a th:href="@{/showProductFormForUpdate(productID=${tempProduct.id})}" class="btn btn-primary btn-sm mb-3">Update</a>
+                <a th:href="@{/deleteproduct(productID=${tempProduct.id})}" class="btn btn-danger btn-sm mb-3"
+                   onclick="if(!(confirm('Are you sure you want to delete this product?')))return false">Delete</a>
+                <a th:href="@{/buyProduct(productID=${tempProduct.id})}" class="btn btn-success btn-sm mb-3">Buy Now</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer class="footer-primary">
+    Copyright &copy; Techie's Treasures, 2024
+</footer>
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka0uB0YfqQsybG8aa9+9Wz2KhtPY7lC4Q9vp8gz7S/1c6rI09mO5f4/6pfsTLySl" crossorigin="anonymous"></script>
+
+</body>
+</html>
